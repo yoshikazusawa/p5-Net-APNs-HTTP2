@@ -126,8 +126,8 @@ sub prepare {
     my $apns_collapse_id = $extra_header->{apns_collapse_id};
     $cb ||= sub {};
 
-    my $clinet = $self->_client;
-    $clinet->request(
+    my $client = $self->_client;
+    $client->request(
         ':scheme'    => 'https',
         ':authority' => join(':', $self->_host, $self->apns_port),
         ':path'      => sprintf('/3/device/%s', $device_token),
@@ -153,8 +153,8 @@ sub send {
     local $self->{_condvar} = AnyEvent->condvar;
 
     my $handle = $self->_handle;
-    my $clinet = $self->_client;
-    while (my $frame = $clinet->next_frame) {
+    my $client = $self->_client;
+    while (my $frame = $client->next_frame) {
         $handle->push_write($frame);
     }
 
